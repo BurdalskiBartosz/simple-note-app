@@ -5,9 +5,10 @@ import supabase from "./services/supabaseClient";
 import SideNav from "./components/SideNav";
 import { useAuth } from "./hooks/useAuth";
 import Notes from "./components/Notes";
+import Button from "./components/Button";
 
 export default function App() {
-  const { session, user, signOut } = useAuth();
+  const { session, signOut } = useAuth();
 
   if (!session) {
     return (
@@ -20,19 +21,15 @@ export default function App() {
         />
       </div>
     );
-  } else if (user) {
+  } else {
     return (
-      <section className="flex h-screen flex-col gap-y-1 bg-dark p-1">
+      <section className="flex w-full h-screen flex-col gap-y-1 bg-dark p-1 relative overflow-hidden">
         <div className="flex h-full gap-1">
           <SideNav />
-          <main className="grow h-full">
-            <button
-              onClick={() => signOut()}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-            >
-              LOGOUT
-            </button>
-
+          <main className="grow h-full flex flex-col gap-5 items-start">
+            <Button onClick={signOut} type="danger">
+              Logout
+            </Button>
             <Notes />
           </main>
         </div>

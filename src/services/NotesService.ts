@@ -8,24 +8,27 @@ class NotesService {
     this.client = client;
   }
 
-  async getNotes(user_id: string) {
-    const { data, error } = await this.client
-      .from("note")
-      .select()
-      .eq("user_id", user_id);
+  async getAll() {
+    const { data, error } = await this.client.from("note").select();
     return { data, error };
   }
 
-  async updateNote(id: number, data: Partial<Tables<"note">>) {
-    await supabase.from("note").update(data).eq("id", id);
+  async update(id: number, data: Partial<Tables<"note">>) {
+    await this.client.from("note").update(data).eq("id", id);
   }
 
-  async addNote(data: Partial<Tables<"note">>) {
+  async add(data: Partial<Tables<"note">>) {
     if (data.id) {
-      await this.updateNote(data.id, data);
+      await this.update(data.id, data);
       return;
     }
-    await supabase.from("note").insert(data);
+    await this.client.from("note").insert(data);
+  }
+
+  async delete(id: number) {
+    console.log("delete", id);
+    const r = await this.client.from("note").delete().eq("id", id);
+    console.log(r);
   }
 }
 

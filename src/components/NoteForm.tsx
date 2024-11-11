@@ -1,11 +1,12 @@
 import { ChangeEvent, FormEvent } from "react";
 import { PartialNote } from "../types/Notes";
+import Button from "./Button";
 
 type FormProps = {
   onCancel: () => void;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (note: PartialNote) => void;
-  note: PartialNote;
+  note: PartialNote | null;
 };
 
 const Form = (props: FormProps) => {
@@ -27,27 +28,50 @@ const Form = (props: FormProps) => {
     onSubmit(newNote);
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <p>Title</p>
-        <input name="title" value={note?.title ?? ""} onChange={onChange} />
+    <form className="flex flex-col gap-5 items-start " onSubmit={handleSubmit}>
+      <h3 className="font-bold text-xl">Add new note</h3>
+      <div className="mb-4">
+        <label
+          className="block text-gray-300 text-sm font-bold mb-2"
+          htmlFor="noteTitle"
+        >
+          Note title
+        </label>
+        <input
+          name="title"
+          value={note?.title ?? ""}
+          onChange={onChange}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+          id="noteTitle"
+          type="text"
+          placeholder="New note..."
+        />
       </div>
-      <div>
-        <p>Text</p>
-        <input name="text" value={note?.text ?? ""} onChange={onChange} />
+      <div className="mb-4">
+        <label
+          className="block text-gray-300 text-sm font-bold mb-2"
+          htmlFor="noteText"
+        >
+          Note text
+        </label>
+        <input
+          name="text"
+          value={note?.text ?? ""}
+          onChange={onChange}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+          id="noteText"
+          type="text"
+          placeholder="Note text..."
+        />
       </div>
-      <button
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-        onClick={onCancel}
-      >
-        Cancel
-      </button>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-        onSubmit={handleSubmit}
-      >
-        Submit
-      </button>
+
+      <div className="flex gap-5">
+        <Button onClick={onCancel} type="danger">
+          Cancel
+        </Button>
+
+        <Button isSubmitButton>Submit</Button>
+      </div>
     </form>
   );
 };
