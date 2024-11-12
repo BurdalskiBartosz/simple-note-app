@@ -1,14 +1,13 @@
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import notesService from "../services/NotesService";
+import notesService from "../../services/NotesService";
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
-import { PartialNote, Note } from "../types/Notes";
-import Button from "./Button";
+import Button from "../Button/Button";
 import classNames from "classnames";
+import { Note, PartialNote } from "./types";
 
-export default function Notes() {
+const Notes = () => {
   const [notes, setNotes] = useState<Note[] | null>(null);
-
   const [selected, setSelected] = useState<PartialNote | null>(null);
 
   const getNotes = useCallback(async () => {
@@ -79,4 +78,6 @@ export default function Notes() {
       />
     </div>
   );
-}
+};
+
+export default Notes;

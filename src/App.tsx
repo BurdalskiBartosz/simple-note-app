@@ -4,8 +4,8 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import supabase from "./services/supabaseClient";
 import SideNav from "./components/SideNav";
 import { useAuth } from "./hooks/useAuth";
-import Notes from "./components/Notes";
-import Button from "./components/Button";
+import Notes from "./components/Notes/Notes";
+import Button from "./components/Button/Button";
 
 export default function App() {
   const { session, signOut } = useAuth();

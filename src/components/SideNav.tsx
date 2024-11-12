@@ -41,7 +41,7 @@ const appRoutes = [
   },
 ];
 
-export default function SideNav() {
+const SideNav = () => {
   return (
     <div className="flex flex-col border-r-[2px] border-r-white bg-dark">
       <nav className="py-4 pr-9">
@@ -75,4 +75,6 @@ export default function SideNav() {
       </div>
     </div>
   );
-}
+};
+
+export default SideNav;

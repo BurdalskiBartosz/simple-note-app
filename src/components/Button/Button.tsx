@@ -1,18 +1,12 @@
-import { PropsWithChildren } from "react";
 import classNames from "classnames";
+import { ButtonProps } from "./types";
 
-type ButtonProps = PropsWithChildren & {
-  onClick?: (data: never) => void;
-  type?: "primary" | "danger";
-  isSubmitButton?: boolean;
-};
-
-export default function Button({
+const Button = ({
   children,
   onClick,
   type = "primary",
   isSubmitButton = false,
-}: ButtonProps) {
+}: ButtonProps) => {
   return (
     <button
       type={isSubmitButton ? "submit" : "button"}
@@ -25,4 +19,6 @@ export default function Button({
       {children}
     </button>
   );
-}
+};
+
+export default Button;

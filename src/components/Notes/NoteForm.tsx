@@ -1,17 +1,8 @@
-import { ChangeEvent, FormEvent } from "react";
-import { PartialNote } from "../types/Notes";
-import Button from "./Button";
+import type { FormEvent } from "react";
+import Button from "../Button/Button";
+import type { NoteFormProps } from "./types";
 
-type FormProps = {
-  onCancel: () => void;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (note: PartialNote) => void;
-  note: PartialNote | null;
-};
-
-const Form = (props: FormProps) => {
-  const { note, onCancel, onChange, onSubmit } = props;
-
+const Form = ({ note, onCancel, onChange, onSubmit }: NoteFormProps) => {
   const handleSubmit = (
     event: FormEvent<HTMLFormElement | HTMLButtonElement>
   ) => {
