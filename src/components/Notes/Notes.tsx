@@ -1,24 +1,36 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import notesService from "../../services/NotesService";
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
 import Button from "../Button/Button";
 import classNames from "classnames";
 import { Note, PartialNote } from "./types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Notes = () => {
-  const [notes, setNotes] = useState<Note[] | null>(null);
+  const queryClient = useQueryClient();
   const [selected, setSelected] = useState<PartialNote | null>(null);
 
-  const getNotes = useCallback(async () => {
-    const { data } = await notesService.getAll();
+  const { data } = useQuery({
+    queryKey: ["notes"],
+    queryFn: async () => {
+      const { data } = await notesService.getAll();
+      return data;
+    },
+  });
 
-    setNotes(data);
-  }, []);
-
-  useEffect(() => {
-    getNotes();
-  }, [getNotes]);
+  const { mutate: addNote } = useMutation({
+    mutationFn: (note: PartialNote) => notesService.add(note),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
+  const { mutate: deleteNote } = useMutation({
+    mutationFn: (id: number) => notesService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
 
   const onSelect = (note: Note) => {
     setSelected(note);
@@ -30,11 +42,10 @@ const Notes = () => {
 
   const onCancel = () => {
     setSelected(null);
-    console.log("onCancel");
   };
-  const onDelete = async (id: number) => {
-    await notesService.delete(id);
-    await getNotes();
+
+  const onDelete = (id: number) => {
+    deleteNote(id);
   };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -45,9 +56,8 @@ const Notes = () => {
     });
   };
 
-  const onSubmit = async (note: PartialNote) => {
-    await notesService.add(note);
-    await getNotes();
+  const onSubmit = (note: PartialNote) => {
+    addNote(note);
     setSelected(null);
   };
 
@@ -70,12 +80,14 @@ const Notes = () => {
           onSubmit={onSubmit}
         />
       </div>
-      <NoteList
-        notes={notes}
-        onSelect={onSelect}
-        onDelete={onDelete}
-        selected={selected}
-      />
+      {data && (
+        <NoteList
+          notes={data}
+          onSelect={onSelect}
+          onDelete={onDelete}
+          selected={selected}
+        />
+      )}
     </div>
   );
 };

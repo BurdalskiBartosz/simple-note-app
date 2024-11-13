@@ -15,13 +15,14 @@ export type NoteFormProps = {
 export type NoteHandlers = {
   onSelect: (note: Note) => void;
   onDelete: (id: number) => void;
-  selected: PartialNote | null;
 };
 
 export type NoteListProps = {
   notes: Note[] | null;
+  selected: PartialNote | null;
 } & NoteHandlers;
 
 export type NoteProps = {
   note: Note;
+  selected: PartialNote | null;
 } & NoteHandlers;
