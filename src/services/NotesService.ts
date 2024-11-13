@@ -26,9 +26,7 @@ class NotesService {
   }
 
   async delete(id: number) {
-    console.log("delete", id);
-    const r = await this.client.from("note").delete().eq("id", id);
-    console.log(r);
+    await this.client.from("note").delete().eq("id", id);
   }
 }
 
