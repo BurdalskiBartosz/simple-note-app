@@ -21,15 +21,11 @@ const Notes = () => {
 
   const { mutate: addNote } = useMutation({
     mutationFn: (note: PartialNote) => notesService.add(note),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notes"] }),
   });
   const { mutate: deleteNote } = useMutation({
     mutationFn: (id: number) => notesService.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notes"] }),
   });
 
   const onSelect = (note: Note) => {
