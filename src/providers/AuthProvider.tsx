@@ -1,11 +1,18 @@
-import { Session, User } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 import { PropsWithChildren, useEffect, useState } from "react";
 import supabase from "../services/supabaseClient";
 import { AuthContext } from "./contextTypes";
 
+const key = "sb-fzkesarohqaicntobnnq-auth-token";
+
+function getStoredSession() {
+  const item = localStorage.getItem(key);
+  if (item) return JSON.parse(item);
+}
+
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [session, setSession] = useState<Session | null>(getStoredSession());
+  const isAuthenticated = !!session;
 
   const getSession = async () => {
     const { data } = await supabase.auth.getSession();
@@ -13,19 +20,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    setUser(session?.user);
-  }, [session]);
-
-  useEffect(() => {
     getSession();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   const signOut = async () => {
@@ -33,7 +28,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <AuthContext.Provider value={{ session, signOut, user }}>
+    <AuthContext.Provider
+      value={{ session, setSession, isAuthenticated, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

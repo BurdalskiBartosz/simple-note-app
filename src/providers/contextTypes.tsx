@@ -1,14 +1,16 @@
-import { Session, User } from "@supabase/supabase-js";
-import { createContext } from "react";
+import { Session } from "@supabase/supabase-js";
+import { createContext, Dispatch, SetStateAction } from "react";
 
-type tAuthContex = {
+export type tAuthContex = {
   session: Session | null;
-  user: User | undefined;
-  signOut: () => void;
+  signOut: () => Promise<void>;
+  isAuthenticated: boolean;
+  setSession: Dispatch<SetStateAction<Session | null>>;
 };
 
 export const AuthContext = createContext<tAuthContex>({
-  user: undefined,
   session: null,
-  signOut: () => {},
+  signOut: async () => {},
+  isAuthenticated: false,
+  setSession: () => {},
 });
