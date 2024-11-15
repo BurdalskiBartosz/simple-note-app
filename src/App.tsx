@@ -1,39 +1,36 @@
-import "./index.css";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import supabase from "./services/supabaseClient";
-import SideNav from "./components/SideNav";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuth } from "./hooks/useAuth";
-import Notes from "./components/Notes/Notes";
-import Button from "./components/Button/Button";
+import { AuthProvider } from "./providers/AuthProvider";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
-export default function App() {
-  const { session, signOut } = useAuth();
+const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  context: { auth: undefined! },
+});
 
-  if (!session) {
-    return (
-      <div className="container">
-        <Auth
-          supabaseClient={supabase}
-          providers={[]}
-          appearance={{ theme: ThemeSupa }}
-          theme="dark"
-        />
-      </div>
-    );
-  } else {
-    return (
-      <section className="flex w-full h-screen flex-col gap-y-1 bg-dark p-1 relative overflow-hidden">
-        <div className="flex h-full gap-1">
-          <SideNav />
-          <main className="grow h-full flex flex-col gap-5 items-start">
-            <Button onClick={signOut} type="danger">
-              Logout
-            </Button>
-            <Notes />
-          </main>
-        </div>
-      </section>
-    );
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
   }
 }
+
+const queryClient = new QueryClient();
+
+function InnerApp() {
+  const auth = useAuth();
+
+  return <RouterProvider router={router} context={{ auth }} />;
+}
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <InnerApp />
+      </QueryClientProvider>
+    </AuthProvider>
+  );
+};
+export default App;
