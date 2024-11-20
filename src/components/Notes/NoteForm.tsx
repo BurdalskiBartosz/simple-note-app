@@ -5,7 +5,7 @@ import type { NoteFormProps } from "./types";
 const Form = ({ note, onCancel, onChange, onSubmit }: NoteFormProps) => {
   const handleSubmit = (
     event: FormEvent<HTMLFormElement | HTMLButtonElement>
-  ) => {
+  ): undefined => {
     event.preventDefault();
 
     const formData = new FormData(event.target as HTMLFormElement);

@@ -28,23 +28,23 @@ const Notes = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notes"] }),
   });
 
-  const onSelect = (note: Note) => {
+  const onSelect = (note: Note): undefined => {
     setSelected(note);
   };
 
-  const newNote = () => {
+  const newNote = (): undefined => {
     setSelected({ title: "", text: "" });
   };
 
-  const onCancel = () => {
+  const onCancel = (): undefined => {
     setSelected(null);
   };
 
-  const onDelete = (id: number) => {
+  const onDelete = (id: number): undefined => {
     deleteNote(id);
   };
 
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (event: ChangeEvent<HTMLInputElement>): undefined => {
     const { name, value } = event.target;
     setSelected({
       ...selected,
@@ -52,7 +52,7 @@ const Notes = () => {
     });
   };
 
-  const onSubmit = (note: PartialNote) => {
+  const onSubmit = (note: PartialNote): undefined => {
     addNote(note);
     setSelected(null);
   };
