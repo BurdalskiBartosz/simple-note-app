@@ -6,12 +6,14 @@ import Button from "../Button/Button";
 import classNames from "classnames";
 import { Note, PartialNote } from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Tables } from "../../types/database.types";
 
-const Notes = () => {
+const Notes = ({ notes }: { notes: Tables<"note">[] | null }) => {
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<PartialNote | null>(null);
 
   const { data } = useQuery({
+    initialData: notes,
     queryKey: ["notes"],
     queryFn: async () => {
       const { data } = await notesService.getAll();

@@ -7,14 +7,14 @@ export type PartialNote = Partial<Note>;
 
 export type NoteFormProps = {
   onCancel: () => void;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (note: PartialNote) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => undefined;
+  onSubmit: (note: PartialNote) => undefined;
   note: PartialNote | null;
 };
 
 export type NoteHandlers = {
-  onSelect: (note: Note) => void;
-  onDelete: (id: number) => void;
+  onSelect: (note: Note) => undefined;
+  onDelete: (id: number) => undefined;
 };
 
 export type NoteListProps = {

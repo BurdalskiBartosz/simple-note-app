@@ -16,7 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppProtectedImport } from './routes/app/_protected'
-import { Route as AppProtectedIndexImport } from './routes/app/_protected.index'
+import { Route as AppProtectedIndexImport } from './routes/app/_protected/index'
 
 // Create Virtual Routes
 
@@ -203,7 +203,7 @@ export const routeTree = rootRoute
       ]
     },
     "/app/_protected/": {
-      "filePath": "app/_protected.index.tsx",
+      "filePath": "app/_protected/index.tsx",
       "parent": "/app/_protected"
     }
   }
