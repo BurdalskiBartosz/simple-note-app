@@ -21,10 +21,19 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     getSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setSession(null);
   };
 
   return (

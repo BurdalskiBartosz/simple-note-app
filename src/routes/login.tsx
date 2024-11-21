@@ -2,13 +2,13 @@ import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import supabase from "../services/supabaseClient";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
-  beforeLoad: ({ location, context }) => {
-    if (context.auth.isAuthenticated) {
+  beforeLoad: async ({ location, context }) => {
+    if (context.auth.session) {
       throw redirect({
         to: "/app",
         search: {
@@ -20,29 +20,20 @@ export const Route = createFileRoute("/login")({
 });
 
 function RouteComponent() {
-  const { setSession, isAuthenticated } = useAuth();
+  const { session } = useAuth();
   const router = useRouter();
   const navigate = Route.useNavigate();
 
-  useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  const goToApp = useCallback(async () => {
+    await router.invalidate();
+    await navigate({ to: "/app" });
+  }, [router, navigate]);
 
   useEffect(() => {
-    const navigateToApp = async () => {
-      await router.invalidate();
-      await navigate({ to: "/app" });
-    };
-    if (isAuthenticated) {
-      navigateToApp();
+    if (session) {
+      goToApp();
     }
-  }, [isAuthenticated]);
+  }, [session, goToApp]);
 
   return (
     <div className="container">
