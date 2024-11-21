@@ -36,7 +36,7 @@ function RouteComponent() {
   }, [session, goToApp]);
 
   return (
-    <div className="container">
+    <div className="px-4 mx-auto max-w-[400px]">
       <Auth
         supabaseClient={supabase}
         providers={[]}
