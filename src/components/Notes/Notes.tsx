@@ -6,9 +6,8 @@ import Button from "../Button/Button";
 import classNames from "classnames";
 import { Note, PartialNote } from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Tables } from "../../types/database.types";
 
-const Notes = ({ notes }: { notes: Tables<"note">[] | null }) => {
+const Notes = ({ notes }: { notes: Note[] | null }) => {
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<PartialNote | null>(null);
 
@@ -61,7 +60,11 @@ const Notes = ({ notes }: { notes: Tables<"note">[] | null }) => {
 
   return (
     <div className="w-full h-full flex flex-col gap-5 ">
-      <div>{!selected && <Button onClick={newNote}>New Note</Button>}</div>
+      <div>
+        <Button isDisabled={!!selected} onClick={newNote}>
+          New Note
+        </Button>
+      </div>
 
       <div
         className={classNames(

@@ -5,7 +5,7 @@ import Notes from "../../../components/Notes/Notes";
 export const Route = createFileRoute("/app/_protected/")({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    const data = await queryClient.fetchQuery({
+    const data = await queryClient.ensureQueryData({
       queryKey: ["notes"],
       queryFn: async () => {
         const { data } = await notesService.getAll();

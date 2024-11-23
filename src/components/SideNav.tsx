@@ -6,38 +6,8 @@ const appRoutes = [
   },
   {
     href: `#`,
-    label: "Tasks",
-    icon: "task",
-  },
-  {
-    href: `#`,
     label: "Notes",
     icon: "note",
-  },
-  {
-    href: `#`,
-    label: "Lists",
-    icon: "list",
-  },
-  {
-    href: `#`,
-    label: "Schedules",
-    icon: "schedule",
-  },
-  {
-    href: `#`,
-    label: "Goals",
-    icon: "goal",
-  },
-  {
-    href: `#`,
-    label: "Calendar",
-    icon: "calendar",
-  },
-  {
-    href: `#`,
-    label: "Projects",
-    icon: "project",
   },
 ];
 

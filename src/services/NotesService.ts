@@ -1,6 +1,5 @@
 import { PostgrestError } from "@supabase/supabase-js";
 import { Note } from "../components/Notes/types";
-import { Tables } from "../types/database.types";
 import supabase, { Client } from "./supabaseClient";
 
 class NotesService {
@@ -18,11 +17,11 @@ class NotesService {
     return { data, error };
   }
 
-  async update(id: number, data: Partial<Tables<"note">>): Promise<undefined> {
+  async update(id: number, data: Partial<Note>): Promise<undefined> {
     await this.client.from("note").update(data).eq("id", id);
   }
 
-  async add(data: Partial<Tables<"note">>): Promise<undefined> {
+  async add(data: Partial<Note>): Promise<undefined> {
     if (data.id) {
       await this.update(data.id, data);
       return;
