@@ -36,13 +36,20 @@ function RouteComponent() {
   }, [session, goToApp]);
 
   return (
-    <div className="px-4 mx-auto max-w-[400px]">
-      <Auth
-        supabaseClient={supabase}
-        providers={[]}
-        appearance={{ theme: ThemeSupa }}
-        theme="dark"
-      />
+    <div className="mx-auto grid grid-cols-2 h-screen ">
+      <div className="bg-green-300 flex items-center justify-center px-4">
+        <h3 className="text-gray-600 text-8xl">Take your notes</h3>
+      </div>
+      <div className="flex items-center justify-center px-4">
+        <div className="grow max-w-[420px]">
+          <Auth
+            supabaseClient={supabase}
+            providers={[]}
+            appearance={{ theme: ThemeSupa }}
+            theme="dark"
+          />
+        </div>
+      </div>
     </div>
   );
 }
