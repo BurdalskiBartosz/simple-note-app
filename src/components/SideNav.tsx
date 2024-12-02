@@ -1,11 +1,13 @@
+import { Link } from "@tanstack/react-router";
+
 const appRoutes = [
   {
-    href: `#`,
+    href: `/app`,
     label: "Dashboard",
     icon: "dashboard",
   },
   {
-    href: `#`,
+    href: `/app/notes`,
     label: "Notes",
     icon: "note",
   },
@@ -18,13 +20,13 @@ const SideNav = () => {
         <ul className="flex list-none flex-col gap-3">
           {appRoutes.map((route, i) => {
             return (
-              <a
+              <Link
                 key={i}
                 className="px-2 text-sm font-semibold text-white hover:underline"
-                href={route.href}
+                to={route.href}
               >
                 {route.label}
-              </a>
+              </Link>
             );
           })}
         </ul>

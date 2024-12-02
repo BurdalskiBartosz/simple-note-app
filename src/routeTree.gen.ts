@@ -17,6 +17,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppProtectedImport } from './routes/app/_protected'
 import { Route as AppProtectedIndexImport } from './routes/app/_protected/index'
+import { Route as AppProtectedNotesImport } from './routes/app/_protected/notes'
 
 // Create Virtual Routes
 
@@ -53,6 +54,12 @@ const AppProtectedIndexRoute = AppProtectedIndexImport.update({
   getParentRoute: () => AppProtectedRoute,
 } as any)
 
+const AppProtectedNotesRoute = AppProtectedNotesImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => AppProtectedRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -85,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProtectedImport
       parentRoute: typeof AppRoute
     }
+    '/app/_protected/notes': {
+      id: '/app/_protected/notes'
+      path: '/notes'
+      fullPath: '/app/notes'
+      preLoaderRoute: typeof AppProtectedNotesImport
+      parentRoute: typeof AppProtectedImport
+    }
     '/app/_protected/': {
       id: '/app/_protected/'
       path: '/'
@@ -98,10 +112,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AppProtectedRouteChildren {
+  AppProtectedNotesRoute: typeof AppProtectedNotesRoute
   AppProtectedIndexRoute: typeof AppProtectedIndexRoute
 }
 
 const AppProtectedRouteChildren: AppProtectedRouteChildren = {
+  AppProtectedNotesRoute: AppProtectedNotesRoute,
   AppProtectedIndexRoute: AppProtectedIndexRoute,
 }
 
@@ -123,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/app': typeof AppProtectedRouteWithChildren
+  '/app/notes': typeof AppProtectedNotesRoute
   '/app/': typeof AppProtectedIndexRoute
 }
 
@@ -130,6 +147,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/app': typeof AppProtectedIndexRoute
+  '/app/notes': typeof AppProtectedNotesRoute
 }
 
 export interface FileRoutesById {
@@ -138,20 +156,22 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/app': typeof AppRouteWithChildren
   '/app/_protected': typeof AppProtectedRouteWithChildren
+  '/app/_protected/notes': typeof AppProtectedNotesRoute
   '/app/_protected/': typeof AppProtectedIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/app' | '/app/'
+  fullPaths: '/' | '/login' | '/app' | '/app/notes' | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/app'
+  to: '/' | '/login' | '/app' | '/app/notes'
   id:
     | '__root__'
     | '/'
     | '/login'
     | '/app'
     | '/app/_protected'
+    | '/app/_protected/notes'
     | '/app/_protected/'
   fileRoutesById: FileRoutesById
 }
@@ -199,8 +219,13 @@ export const routeTree = rootRoute
       "filePath": "app/_protected.tsx",
       "parent": "/app",
       "children": [
+        "/app/_protected/notes",
         "/app/_protected/"
       ]
+    },
+    "/app/_protected/notes": {
+      "filePath": "app/_protected/notes.tsx",
+      "parent": "/app/_protected"
     },
     "/app/_protected/": {
       "filePath": "app/_protected/index.tsx",
