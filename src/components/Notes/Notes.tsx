@@ -1,11 +1,11 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import notesService from "@/services/NotesService";
-import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
-import Button from "../Button/Button";
 import classNames from "classnames";
 import { Note, PartialNote } from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "../ui/button";
+import AddNoteForm from "./AddNoteForm";
 
 const Notes = ({ notes }: { notes: Note[] | null }) => {
   const queryClient = useQueryClient();
@@ -29,31 +29,23 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notes"] }),
   });
 
-  const onSelect = (note: Note): undefined => {
+  const onSelect = (note: Note): void => {
     setSelected(note);
   };
 
-  const newNote = (): undefined => {
+  const newNote = (): void => {
     setSelected({ title: "", text: "" });
   };
 
-  const onCancel = (): undefined => {
+  const onCancel = (): void => {
     setSelected(null);
   };
 
-  const onDelete = (id: number): undefined => {
+  const onDelete = (id: number): void => {
     deleteNote(id);
   };
 
-  const onChange = (event: ChangeEvent<HTMLInputElement>): undefined => {
-    const { name, value } = event.target;
-    setSelected({
-      ...selected,
-      [name]: value,
-    });
-  };
-
-  const onSubmit = (note: PartialNote): undefined => {
+  const onSubmit = (note: PartialNote): void => {
     addNote(note);
     setSelected(null);
   };
@@ -61,7 +53,7 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
   return (
     <div className="w-full h-full flex flex-col gap-5 ">
       <div>
-        <Button isDisabled={!!selected} onClick={newNote}>
+        <Button disabled={!!selected} variant="secondary" onClick={newNote}>
           New Note
         </Button>
       </div>
@@ -74,12 +66,7 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
           }
         )}
       >
-        <NoteForm
-          note={selected}
-          onChange={onChange}
-          onCancel={onCancel}
-          onSubmit={onSubmit}
-        />
+        <AddNoteForm note={selected} onCancel={onCancel} onSubmit={onSubmit} />
       </div>
       {data && (
         <NoteList

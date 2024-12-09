@@ -5,8 +5,8 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import SideNav from "@/components/SideNav";
-import Button from "@/components/Button/Button";
 import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/app/_protected")({
   component: RouteComponent,
@@ -39,7 +39,7 @@ function RouteComponent() {
       <div className="flex h-full gap-1">
         <SideNav />
         <main className="grow h-full flex flex-col gap-5 items-start">
-          <Button onClick={handleLogout} type="danger">
+          <Button onClick={handleLogout} variant="destructive">
             Logout
           </Button>
           <Outlet />
