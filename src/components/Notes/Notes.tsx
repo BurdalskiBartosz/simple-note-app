@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import notesService from "../../services/NotesService";
+import notesService from "@/services/NotesService";
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
 import Button from "../Button/Button";

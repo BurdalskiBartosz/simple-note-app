@@ -4,9 +4,9 @@ import {
   redirect,
   useRouter,
 } from "@tanstack/react-router";
-import SideNav from "../../components/SideNav";
-import Button from "../../components/Button/Button";
-import { useAuth } from "../../hooks/useAuth";
+import SideNav from "@/components/SideNav";
+import Button from "@/components/Button/Button";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/app/_protected")({
   component: RouteComponent,
@@ -35,7 +35,7 @@ function RouteComponent() {
   };
 
   return (
-    <section className="flex w-full h-screen flex-col gap-y-1 bg-dark p-1 relative overflow-hidden">
+    <section className="flex w-full h-screen flex-col gap-y-1 bg-dark p-1 relative overflow-hidden bg-slate-800">
       <div className="flex h-full gap-1">
         <SideNav />
         <main className="grow h-full flex flex-col gap-5 items-start">

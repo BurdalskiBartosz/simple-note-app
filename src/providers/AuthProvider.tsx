@@ -1,6 +1,6 @@
 import { Session } from "@supabase/supabase-js";
 import { PropsWithChildren, useEffect, useState } from "react";
-import supabase from "../services/supabaseClient";
+import supabase from "@/services/supabaseClient";
 import { AuthContext } from "./contextTypes";
 
 const key = "sb-fzkesarohqaicntobnnq-auth-token";

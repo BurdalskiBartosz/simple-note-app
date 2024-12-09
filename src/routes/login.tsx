@@ -1,9 +1,9 @@
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import supabase from "../services/supabaseClient";
 import { useCallback, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
+import supabase from "@/services/supabaseClient";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
@@ -36,7 +36,7 @@ function RouteComponent() {
   }, [session, goToApp]);
 
   return (
-    <div className="mx-auto grid grid-cols-2 h-screen ">
+    <div className="mx-auto grid grid-cols-2 h-screen bg-gray-600">
       <div className="bg-green-300 flex items-center justify-center px-4">
         <h3 className="text-gray-600 text-8xl">Take your notes</h3>
       </div>
