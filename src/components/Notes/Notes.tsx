@@ -1,10 +1,8 @@
 import { useState } from "react";
 import notesService from "@/services/NotesService";
 import NoteList from "./NoteList";
-import classNames from "classnames";
 import { Note, PartialNote } from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "../ui/button";
 import AddNoteForm from "./AddNoteForm";
 
 const Notes = ({ notes }: { notes: Note[] | null }) => {
@@ -33,10 +31,6 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
     setSelected(note);
   };
 
-  const newNote = (): void => {
-    setSelected({ title: "", text: "" });
-  };
-
   const onCancel = (): void => {
     setSelected(null);
   };
@@ -46,28 +40,19 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
   };
 
   const onSubmit = (note: PartialNote): void => {
-    addNote(note);
+    addNote({
+      ...selected,
+      ...note,
+    });
     setSelected(null);
   };
 
   return (
     <div className="w-full h-full flex flex-col gap-5 ">
       <div>
-        <Button disabled={!!selected} variant="secondary" onClick={newNote}>
-          New Note
-        </Button>
-      </div>
-
-      <div
-        className={classNames(
-          "bg-gray-600 rounded-md absolute ease-linear duration-300 right-0 top-0 h-full p-5",
-          {
-            "translate-x-full": !selected,
-          }
-        )}
-      >
         <AddNoteForm note={selected} onCancel={onCancel} onSubmit={onSubmit} />
       </div>
+
       {data && (
         <NoteList
           notes={data}

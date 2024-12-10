@@ -13,7 +13,17 @@ import { Textarea } from "../ui/textarea";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -24,77 +34,93 @@ const formSchema = z.object({
   }),
 });
 
-const AddNoteForm = ({ onCancel, onSubmit }: NoteFormProps) => {
-  const form = useForm<z.infer<typeof formSchema>>({
+const AddNoteForm = ({ onCancel, onSubmit, note }: NoteFormProps) => {
+  const [isOpen, setIsOpen] = useState(!!note);
+  const { reset, ...rest } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      text: "",
+      title: note?.title ?? "",
+      text: note?.text ?? "",
     },
   });
 
   useEffect(() => {
-    form.reset();
-  }, [form]);
+    reset({ title: note?.title ?? "", text: note?.text ?? "" });
+    setIsOpen(!!note);
+  }, [note, reset]);
 
   const handleSubmit = (values: z.infer<typeof formSchema>): undefined => {
     onSubmit(values);
   };
   return (
-    <Form {...form}>
-      <form
-        className="flex flex-col gap-5 items-start "
-        onSubmit={form.handleSubmit(handleSubmit)}
-      >
-        <h3 className="font-bold text-xl">Add new note</h3>
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-300 text-sm font-bold ">
-                Note title
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Note title..."
-                  className="rounded text-white"
-                  {...field}
-                />
-              </FormControl>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <Button variant="outline">Open</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Add new note</SheetTitle>
+          <SheetDescription>Fill the form and save your note.</SheetDescription>
+        </SheetHeader>
+        <Form {...rest} reset={reset}>
+          <form
+            className="flex flex-col gap-5 items-start "
+            onSubmit={rest.handleSubmit(handleSubmit)}
+          >
+            <h3 className="font-bold text-xl">Add new note</h3>
+            <FormField
+              control={rest.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-300 text-sm font-bold ">
+                    Note title
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Note title..."
+                      className="rounded"
+                      {...field}
+                    />
+                  </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="text"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-300 text-sm font-bold ">
-                Note text
-              </FormLabel>
-              <FormControl>
-                <Textarea placeholder="Note text..." {...field} />
-              </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={rest.control}
+              name="text"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-300 text-sm font-bold ">
+                    Note text
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Note text..." {...field} />
+                  </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div className="flex gap-5">
-          <Button onClick={onCancel} type="button" variant="destructive">
-            Cancel
-          </Button>
-
-          <Button variant="secondary" type="submit">
-            New Note
-          </Button>
-        </div>
-      </form>
-    </Form>
+            <SheetFooter>
+              <SheetClose asChild>
+                <Button onClick={onCancel} type="button" variant="destructive">
+                  Cancel
+                </Button>
+              </SheetClose>
+              <SheetClose asChild>
+                <Button variant="secondary" type="submit">
+                  New Note
+                </Button>
+              </SheetClose>
+            </SheetFooter>
+          </form>
+        </Form>
+      </SheetContent>
+    </Sheet>
   );
 };
 
