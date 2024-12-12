@@ -1,15 +1,6 @@
 import type { NoteFormProps } from "./types";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { Form } from "@/components/ui/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +15,8 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { useEffect, useState } from "react";
+import FormInput from "../Inputs/FormInput/FormInput";
+import FormTextarea from "../Inputs/FormTextarea/FormTextarea";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -34,9 +27,11 @@ const formSchema = z.object({
   }),
 });
 
+type FormSchemaType = z.infer<typeof formSchema>;
+
 const AddNoteForm = ({ onCancel, onSubmit, note }: NoteFormProps) => {
   const [isOpen, setIsOpen] = useState(!!note);
-  const { reset, ...rest } = useForm<z.infer<typeof formSchema>>({
+  const { reset, ...rest } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: note?.title ?? "",
@@ -49,11 +44,17 @@ const AddNoteForm = ({ onCancel, onSubmit, note }: NoteFormProps) => {
     setIsOpen(!!note);
   }, [note, reset]);
 
-  const handleSubmit = (values: z.infer<typeof formSchema>): undefined => {
+  const handleSubmit = (values: FormSchemaType): undefined => {
     onSubmit(values);
   };
+
+  const onOpenChange = (state: boolean) => {
+    if (isOpen) onCancel();
+    setIsOpen(state);
+  };
+
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
         <Button variant="outline">Open</Button>
       </SheetTrigger>
@@ -67,42 +68,15 @@ const AddNoteForm = ({ onCancel, onSubmit, note }: NoteFormProps) => {
             className="flex flex-col gap-5 items-start "
             onSubmit={rest.handleSubmit(handleSubmit)}
           >
-            <h3 className="font-bold text-xl">Add new note</h3>
-            <FormField
+            <FormInput<FormSchemaType>
               control={rest.control}
               name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300 text-sm font-bold ">
-                    Note title
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Note title..."
-                      className="rounded"
-                      {...field}
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+              placeholder="Note title..."
             />
-            <FormField
+            <FormTextarea<FormSchemaType>
               control={rest.control}
               name="text"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300 text-sm font-bold ">
-                    Note text
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Note text..." {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+              placeholder="Note text..."
             />
 
             <SheetFooter>
