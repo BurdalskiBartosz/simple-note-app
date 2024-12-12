@@ -12,8 +12,8 @@ export type NoteFormProps = {
 };
 
 export type NoteHandlers = {
-  onSelect: (note: Note) => void;
-  onDelete: (id: number) => void;
+  onSelectCard: (note: Note) => void;
+  onDeleteCard: (id: number) => void;
 };
 
 export type NoteListProps = {

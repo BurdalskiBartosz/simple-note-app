@@ -27,7 +27,7 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notes"] }),
   });
 
-  const onSelect = (note: Note): void => {
+  const onSelectCard = (note: Note): void => {
     setSelected(note);
   };
 
@@ -35,7 +35,7 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
     setSelected(null);
   };
 
-  const onDelete = (id: number): void => {
+  const onDeleteCard = (id: number): void => {
     deleteNote(id);
   };
 
@@ -56,8 +56,8 @@ const Notes = ({ notes }: { notes: Note[] | null }) => {
       {data && (
         <NoteList
           notes={data}
-          onSelect={onSelect}
-          onDelete={onDelete}
+          onSelectCard={onSelectCard}
+          onDeleteCard={onDeleteCard}
           selected={selected}
         />
       )}
